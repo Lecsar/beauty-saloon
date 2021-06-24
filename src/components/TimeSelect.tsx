@@ -15,7 +15,7 @@ interface IProps {
 }
 
 export const TimeSelect = observer(({time, onChange}: IProps) => (
-  <Select style={{width: 200}} value={time} onChange={onChange}>
+  <Select value={time} onChange={onChange}>
     {timeOptions.map((time) => (
       <Select.Option key={time} value={time}>
         {time}

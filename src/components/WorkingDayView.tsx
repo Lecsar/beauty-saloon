@@ -11,7 +11,20 @@ interface IProps {
 }
 
 export const WorkingDayView = observer(
-  ({workingDay: {name, isWorkingToday, workingPlacesInfo, toggleIsWorkingToday}}: IProps) => {
+  ({
+    workingDay: {
+      name,
+      isWorkingToday,
+      workingPlacesInfo,
+      hasBreak,
+      breakHours,
+      toggleHasBreak,
+      toggleIsWorkingToday,
+      addBreakInterval,
+      editBreakInterval,
+      removeBreakInterval,
+    },
+  }: IProps) => {
     return (
       <div>
         <div
@@ -26,17 +39,26 @@ export const WorkingDayView = observer(
         </div>
 
         {isWorkingToday && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 2fr',
-              gridColumnGap: '10px',
-              gridRowGap: '10px',
-            }}
-          >
-            {Object.entries(workingPlacesInfo).map(([id, workingPlace]) => (
-              <WorkinPlaceView key={id} title={WORKING_PLACE_DICTIONARY[id].address} workingPlace={workingPlace} />
+          <div>
+            {Object.entries(workingPlacesInfo).map(([id, {isWorkingToday, toggleIsWorkingToday, ...rest}]) => (
+              <WorkinPlaceView
+                key={id}
+                title={WORKING_PLACE_DICTIONARY[id].address}
+                isActive={isWorkingToday}
+                toggleIsActive={toggleIsWorkingToday}
+                {...rest}
+              />
             ))}
+
+            <WorkinPlaceView
+              title="Перерыв"
+              isActive={hasBreak}
+              workingHours={breakHours}
+              addTimeInterval={addBreakInterval}
+              editTimeInterval={editBreakInterval}
+              removeTimeInterval={removeBreakInterval}
+              toggleIsActive={toggleHasBreak}
+            />
           </div>
         )}
       </div>

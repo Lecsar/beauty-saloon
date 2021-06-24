@@ -1,5 +1,5 @@
 import {makeAutoObservable} from 'mobx';
-import {IDay, IdType, ITimeInterval, IWorkingPlace, IWorkingPlaceInfo} from './types';
+import {IDay, ITimeInterval, IWorkingPlace, IWorkingPlaceInfo} from './types';
 
 interface IEditTimeValue {
   // null если не хотим устанавливать, undefined сбрасывает
@@ -9,7 +9,7 @@ interface IEditTimeValue {
 
 export class WorkingPlace implements IWorkingPlaceInfo {
   isWorkingToday = false;
-  workingHours: ITimeInterval[] = [];
+  workingHours: ITimeInterval[] = [{from: undefined, to: undefined}];
 
   constructor() {
     makeAutoObservable(this);
@@ -42,7 +42,7 @@ export class WorkingDay implements IDay {
   name;
   index;
   workingPlacesInfo;
-  breakHours = [];
+  breakHours: ITimeInterval[] = [{from: undefined, to: undefined}];
   hasBreak = false;
   isWorkingToday = false;
 
@@ -55,7 +55,6 @@ export class WorkingDay implements IDay {
   }
 
   public toggleIsWorkingToday = () => {
-    console.log(this.isWorkingToday);
     this.isWorkingToday = !this.isWorkingToday;
   };
 
@@ -63,62 +62,21 @@ export class WorkingDay implements IDay {
     this.hasBreak = !this.hasBreak;
   };
 
-  public toggleAvailabilityOfWorkingPlace = (workingPlaceId: IdType) => {
-    this.workingPlacesInfo[workingPlaceId].toggleIsWorkingToday();
+  public addBreakInterval = () => {
+    this.breakHours.push({from: undefined, to: undefined});
   };
 
-  public addTimeIntervalToPlace = (workingPlaceId: IdType) => {
-    this.workingPlacesInfo[workingPlaceId].addTimeInterval();
+  public removeBreakInterval = (intervalIndex: number) => {
+    this.breakHours.splice(intervalIndex, 1);
   };
 
-  public removeTimeIntervalAtPlace = (workingPlaceId: IdType, intervalIndex: number) => {
-    this.workingPlacesInfo[workingPlaceId].removeTimeInterval(intervalIndex);
-  };
+  public editBreakInterval = (intervalIndex: number, {from, to}: IEditTimeValue) => {
+    if (from !== null) {
+      this.breakHours[intervalIndex].from = from;
+    }
 
-  public editTimeIntervalAtPlace = (workingPlaceId: IdType, intervalIndex: number, timeInterval: IEditTimeValue) => {
-    this.workingPlacesInfo[workingPlaceId].editTimeInterval(intervalIndex, timeInterval);
-  };
-}
-
-export class WorkingWeek {
-  workingDays: WorkingDay[];
-
-  constructor(workingDays: WorkingDay[]) {
-    makeAutoObservable(this);
-
-    this.workingDays = workingDays;
-  }
-
-  private getDay(dayIndex: number) {
-    return this.workingDays[dayIndex];
-  }
-
-  public toggleIsWorkingToday = (dayIndex: number) => {
-    this.getDay(dayIndex).toggleIsWorkingToday();
-  };
-
-  public toggleHasBreak = (dayIndex: number) => {
-    this.getDay(dayIndex).toggleHasBreak();
-  };
-
-  public toggleDayAvailabilityOfWorkingPlace = (dayIndex: number, workingPlaceId: IdType) => {
-    this.getDay(dayIndex).toggleAvailabilityOfWorkingPlace(workingPlaceId);
-  };
-
-  public addTimeIntervalToPlace = (dayIndex: number, workingPlaceId: IdType) => {
-    this.getDay(dayIndex).addTimeIntervalToPlace(workingPlaceId);
-  };
-
-  public removeTimeIntervalAtPlace = (dayIndex: number, workingPlaceId: IdType, intervalIndex: number) => {
-    this.getDay(dayIndex).removeTimeIntervalAtPlace(workingPlaceId, intervalIndex);
-  };
-
-  public editTimeIntervalAtPlace = (
-    dayIndex: number,
-    workingPlaceId: IdType,
-    intervalIndex: number,
-    timeInterval: IEditTimeValue
-  ) => {
-    this.getDay(dayIndex).editTimeIntervalAtPlace(workingPlaceId, intervalIndex, timeInterval);
+    if (to !== null) {
+      this.breakHours[intervalIndex].to = to;
+    }
   };
 }
