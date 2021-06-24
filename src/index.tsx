@@ -1,6 +1,8 @@
 import {StrictMode} from 'react';
 import {render} from 'react-dom';
-import {App} from './App';
+import {App} from './NewApp';
+
+import './style.css';
 
 render(
   <StrictMode>
