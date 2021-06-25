@@ -1,12 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 import {IDay, ITimeInterval, IWorkingPlace, IWorkingPlaceInfo} from './types';
 
-interface IEditTimeValue {
-  // null если не хотим устанавливать, undefined сбрасывает
-  from?: string | null;
-  to?: string | null;
-}
-
 export class WorkingPlace implements IWorkingPlaceInfo {
   isWorkingToday = false;
   workingHours: ITimeInterval[] = [{from: undefined, to: undefined}];
@@ -27,14 +21,12 @@ export class WorkingPlace implements IWorkingPlaceInfo {
     this.workingHours.splice(intervalIndex, 1);
   };
 
-  public editTimeInterval = (intervalIndex: number, {from, to}: IEditTimeValue) => {
-    if (from !== null) {
-      this.workingHours[intervalIndex].from = from;
-    }
+  public editTimeIntervalFrom = (intervalIndex: number, from?: string) => {
+    this.workingHours[intervalIndex].from = from;
+  };
 
-    if (to !== null) {
-      this.workingHours[intervalIndex].to = to;
-    }
+  public editTimeIntervalTo = (intervalIndex: number, to?: string) => {
+    this.workingHours[intervalIndex].to = to;
   };
 }
 
@@ -70,13 +62,11 @@ export class WorkingDay implements IDay {
     this.breakHours.splice(intervalIndex, 1);
   };
 
-  public editBreakInterval = (intervalIndex: number, {from, to}: IEditTimeValue) => {
-    if (from !== null) {
-      this.breakHours[intervalIndex].from = from;
-    }
+  public editBreakIntervalFrom = (intervalIndex: number, from?: string) => {
+    this.breakHours[intervalIndex].from = from;
+  };
 
-    if (to !== null) {
-      this.breakHours[intervalIndex].to = to;
-    }
+  public editBreakIntervalTo = (intervalIndex: number, to?: string) => {
+    this.breakHours[intervalIndex].to = to;
   };
 }

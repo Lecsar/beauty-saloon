@@ -10,12 +10,13 @@ for (let i = 1; i <= 23; i++) {
 }
 
 interface IProps {
-  time: string;
+  time?: string;
+  disabled?: boolean;
   onChange: (time: string) => void;
 }
 
-export const TimeSelect = observer(({time, onChange}: IProps) => (
-  <Select value={time} onChange={onChange}>
+export const TimeSelect = observer(({time, disabled, onChange}: IProps) => (
+  <Select disabled={disabled} value={time} onChange={onChange}>
     {timeOptions.map((time) => (
       <Select.Option key={time} value={time}>
         {time}

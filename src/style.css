@@ -1,1 +1,42 @@
 @import '~antd/dist/antd.css';
+
+.app {
+  margin: auto;
+  padding: 20px;
+  width: 800px;
+}
+
+.saveButton {
+  margin-top: 16px;
+}
+
+.workingDay {
+  border: 1px solid gray;
+  margin-top: 16px;
+  border-radius: 3px;
+  padding: 16px;
+}
+
+.workingDayHeader {
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  grid-column-gap: 10px;
+}
+
+.workingPlace {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-column-gap: 10px;
+}
+
+.workingPlaceLeftCol {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  grid-column-gap: 20px;
+}
+
+.workingPlaceRightCol {
+  display: grid;
+  grid-template-columns: 10px 1fr 30px 1fr 30px 30px;
+  grid-column-gap: 10px;
+}
